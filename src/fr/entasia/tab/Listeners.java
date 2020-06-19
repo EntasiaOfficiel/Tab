@@ -18,7 +18,7 @@ public class Listeners implements Listener {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e){
 		Utils.refreshTab(e.getPlayer());
-//		SBUtils.loadUser(e.getPlayer());
+		SBUtils.loadUser(e.getPlayer());
 	}
 
 

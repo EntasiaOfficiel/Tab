@@ -3,11 +3,14 @@ package fr.entasia.tab;
 import fr.entasia.tab.commands.TabRlCmd;
 import fr.entasia.tab.commands.TestCmd;
 import fr.entasia.tab.utils.SBUtils;
+import fr.entasia.tab.utils.Utils;
 import me.lucko.luckperms.LuckPerms;
 import me.lucko.luckperms.api.LuckPermsApi;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Main extends JavaPlugin {
 
@@ -27,17 +30,17 @@ public class Main extends JavaPlugin {
 		getCommand("test").setExecutor(new TestCmd());
 		SBUtils.loadPriorities();
 
-//		new BukkitRunnable() {
-//			public void run() {
-//				SBUtils.refreshAllUsers();
-//			}
-//		}.runTaskTimer(this, 0, 20*60*5);
-//
-//		new BukkitRunnable() {
-//			public void run() {
-//				for(Player p : Bukkit.getOnlinePlayers()) Utils.refreshTab(p);
-//			}
-//		}.runTaskTimer(this, 0, 20*10);
+		new BukkitRunnable() {
+			public void run() {
+				SBUtils.loadAllUsers();
+			}
+		}.runTaskTimer(this, 0, 20*60*5);
+
+		new BukkitRunnable() {
+			public void run() {
+				for(Player p : Bukkit.getOnlinePlayers()) Utils.refreshTab(p);
+			}
+		}.runTaskTimer(this, 0, 20*10);
 
 
 	}
