@@ -1,8 +1,8 @@
-package fr.entasia.tab.commands;
+package fr.entasia.tab.tools;
 
 
-import fr.entasia.tab.utils.SBUtils;
-import fr.entasia.tab.utils.Utils;
+import fr.entasia.tab.Main;
+import fr.entasia.tab.utils.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,24 +19,24 @@ public class TabRlCmd implements CommandExecutor {
 			else{
 				switch (arg[0]) {
 					case "roles":{
-						SBUtils.loadPriorities();
+						utils.loadPriorities();
 						sender.sendMessage("§bRôles rechargées !");
 						break;
 					}
 					case "players":{
-						SBUtils.loadAllUsers();
+						utils.loadAllUsers();
 						sender.sendMessage("§bJoueurs rechargés !");
 						break;
 					}
 					case "tab":{
-						for (Player p : Bukkit.getOnlinePlayers()) Utils.refreshTab(p);
+						for (Player p : Bukkit.getOnlinePlayers()) Main.refreshTab(p);
 						sender.sendMessage("§bTab rechargé !");
 						break;
 					}
 					case "all":{
-						for (Player p : Bukkit.getOnlinePlayers()) Utils.refreshTab(p);
-						SBUtils.loadPriorities();
-						SBUtils.loadAllUsers();
+						for (Player p : Bukkit.getOnlinePlayers()) Main.refreshTab(p);
+						utils.loadPriorities();
+						utils.loadAllUsers();
 						sender.sendMessage("§3Tout à été rechargé !");
 						break;
 					}

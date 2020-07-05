@@ -1,7 +1,7 @@
 name: Tab
-version: '1.0'
+version: '-1'
 main: fr.entasia.tab.Main
-depend: [LuckPerms,Vault]
+depend: [LuckPerms, Vault, Libraries]
 softdepend: [Multiverse-Core]
 commands:
   tabreload:
