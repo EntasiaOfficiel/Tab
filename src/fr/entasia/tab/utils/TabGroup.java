@@ -1,7 +1,6 @@
 package fr.entasia.tab.utils;
 
 import fr.entasia.apis.utils.ReflectionUtils;
-import net.minecraft.server.v1_9_R2.MerchantRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -58,23 +57,35 @@ public class TabGroup {
 		setField("b", letter+cutName);
 	}
 
-	public void setField(String field, Object value){
-		ReflectionUtils.setField(packet, field, value);
-	}
-
-	public void sendPacket(Player p){
-		ReflectionUtils.sendPacket(p, packet);
-	}
-
-	public void sendPacket(){
-		for(Player p : Bukkit.getOnlinePlayers()){
-			sendPacket(p);
+	private void setField(String field, Object value){
+		try{
+			ReflectionUtils.setField(packet, field, value);
+		}catch(ReflectiveOperationException e){
+			e.printStackTrace();
 		}
 	}
 
+	public synchronized void sendPacket(Player p, Mode mode){
+		setField("i", mode.value);
+		System.out.println("sent packet for "+cutName+" to "+p.getName()+" (mode "+mode.value+") (members "+ Arrays.toString(list.toArray())+")");
+		ReflectionUtils.sendPacket(p, packet);
+	}
 
+	public synchronized void sendPacketAll(Mode mode){
+		sendPacketAll(mode, null);
+	}
 
-	public static TabGroup getByPriority(int w){
+	public synchronized void sendPacketAll(Mode mode, String except){
+		setField("i", mode.value);
+//		System.out.println("sent packet for "+cutName+" to ALL PLAYERS (mode "+mode.value+") (members "+ Arrays.toString(list.toArray())+")");
+		for(Player p : Bukkit.getOnlinePlayers()){
+			if(p.getName().equals(except))continue;
+			System.out.println("sent packet for "+cutName+" to () "+p.getName()+" (mode "+mode.value+") (members "+ Arrays.toString(list.toArray())+")");
+			ReflectionUtils.sendPacket(p, packet);
+		}
+	}
+
+	public static TabGroup getByName(int w){
 		for(TabGroup tg : Utils.tabGroups){
 			if(tg.priority ==w)return tg;
 		}

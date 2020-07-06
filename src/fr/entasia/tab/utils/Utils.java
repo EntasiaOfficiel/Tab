@@ -1,6 +1,5 @@
 package fr.entasia.tab.utils;
 
-import fr.entasia.apis.other.Mutable;
 import fr.entasia.apis.other.Pair;
 import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.errors.EntasiaException;
@@ -10,7 +9,6 @@ import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -31,8 +29,7 @@ public class Utils {
 	public synchronized static void loadPriorities(){
 
 		for(TabGroup tg : tabGroups) {
-			tg.setField("i", 1);
-			tg.sendPacket();
+			tg.sendPacketAll(Mode.DELETE);
 		}
 		tabGroups.clear();
 
@@ -55,10 +52,7 @@ public class Utils {
 		for(TabGroup tg : tabGroups){
 			tg.assignChar(alfa[i]);
 			i++;
-			tg.setField("i", 0);
-			tg.sendPacket();
-			// update marche pas ?
-//			tg.setField("i", 3);
+			tg.sendPacketAll(Mode.CREATE);
 		}
 	}
 
@@ -77,10 +71,10 @@ public class Utils {
 			Pair<String, Integer> pair = LPUtils.getSuffix(user);
 			if(pair==null)error("Luckperms suffix not found for "+p.getName());
 			else{
-				TabGroup tg = TabGroup.getByPriority(pair.value);
+				TabGroup tg = TabGroup.getByName(pair.value);
 				if (tg == null) {
 					loadPriorities();
-					tg = TabGroup.getByPriority(pair.value);
+					tg = TabGroup.getByName(pair.value);
 					if(tg == null) {
 						error("TabGroup could be loaded for prefix "+pair.key+" priority "+pair.value);
 					}
@@ -90,12 +84,11 @@ public class Utils {
 
 				p.setPlayerListName(pair.key.replace("&", "§")+" §7"+p.getDisplayName());
 				tg.list.add(p.getName());
-				tg.sendPacket();
 
 				for(TabGroup i : tabGroups){
-					if(i==tg)continue;
-					i.sendPacket(p);
+					i.sendPacket(p, Mode.CREATE);
 				}
+				tg.sendPacketAll(Mode.ADD_PLAYERS, p.getName());
 			}
 		}
 	}

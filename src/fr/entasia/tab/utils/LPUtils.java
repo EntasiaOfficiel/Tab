@@ -6,8 +6,6 @@ import net.luckperms.api.cacheddata.CachedMetaData;
 import net.luckperms.api.context.ImmutableContextSet;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
-import net.luckperms.api.query.QueryOptions;
-import net.minecraft.server.v1_9_R2.PacketPlayOutScoreboardTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

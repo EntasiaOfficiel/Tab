@@ -6,3 +6,4 @@ softdepend: [Multiverse-Core]
 commands:
   tabreload:
     aliases: [tab, tablist, tabrl]
+  test:
