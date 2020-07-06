@@ -2,11 +2,10 @@ package fr.entasia.tab;
 
 import fr.entasia.apis.utils.PlayerUtils;
 import fr.entasia.tab.tools.Listeners;
-import fr.entasia.tab.tools.TabRlCmd;
-import fr.entasia.tab.tools.TestCmd;
-import fr.entasia.tab.utils.utils;
-import me.lucko.luckperms.LuckPerms;
-import me.lucko.luckperms.api.LuckPermsApi;
+import fr.entasia.tab.tools.TabReloadCmd;
+import fr.entasia.tab.utils.Utils;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
@@ -16,33 +15,37 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class Main extends JavaPlugin {
 
-	public static LuckPermsApi LpAPI;
+	public static LuckPerms lpAPI;
 	public static Chat vaultAPI;
 
 	@Override
 	public void onEnable(){
-		LpAPI = LuckPerms.getApi();
-		vaultAPI = getServer().getServicesManager().getRegistration(Chat.class).getProvider();
-//		SBUtils.scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-//		Utils.scoreboard
+		try{
+			lpAPI = LuckPermsProvider.get();
+			vaultAPI = getServer().getServicesManager().getRegistration(Chat.class).getProvider();
 
-		System.out.println("Plugin activé");
-		getServer().getPluginManager().registerEvents(new Listeners(), this);
-		getCommand("tabreload").setExecutor(new TabRlCmd());
-		getCommand("test").setExecutor(new TestCmd());
-		utils.loadPriorities();
+			getLogger().info("Plugin activé");
+			getServer().getPluginManager().registerEvents(new Listeners(), this);
+			getCommand("tabreload").setExecutor(new TabReloadCmd());
+			Utils.loadPriorities();
 
-		new BukkitRunnable() {
-			public void run() {
-				utils.loadAllUsers();
-			}
-		}.runTaskTimer(this, 0, 20*60*5);
+			new BukkitRunnable() {
+				public void run() {
+					Utils.loadPriorities();
+					Utils.loadAllUsers();
+				}
+			}.runTaskTimer(this, 0, 20*60*5);
 
-		new BukkitRunnable() {
-			public void run() {
-				for(Player p : Bukkit.getOnlinePlayers()) refreshTab(p);
-			}
-		}.runTaskTimer(this, 0, 20*10);
+			new BukkitRunnable() {
+				public void run() {
+					for(Player p : Bukkit.getOnlinePlayers()) refreshTab(p);
+				}
+			}.runTaskTimer(this, 0, 20*10);
+		}catch(Throwable e){
+			e.printStackTrace();
+			getLogger().severe("Une erreur s'est produite ! ARRET DU SERVEUR !");
+			getServer().shutdown();
+		}
 	}
 
 

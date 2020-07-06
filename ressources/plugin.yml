@@ -5,6 +5,4 @@ depend: [LuckPerms, Vault, Libraries]
 softdepend: [Multiverse-Core]
 commands:
   tabreload:
-    aliases: [tab, tablist]
-
-  test:
+    aliases: [tab, tablist, tabrl]
