@@ -12,7 +12,7 @@ public class Listeners implements Listener {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e){
 		Main.refreshTab(e.getPlayer());
-		Utils.loadUser(e.getPlayer());
+		Utils.loadUser(e.getPlayer(), true);
 
 
 //		Player p = e.getPlayer();

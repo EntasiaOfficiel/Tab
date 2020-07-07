@@ -43,7 +43,7 @@ public class LPUtils {
 
 	private static String getGroup(Player p, String suffix){
 		for (String i : Main.vaultAPI.getPlayerGroups(p)) {
-			if (Main.vaultAPI.getGroupSuffix(Bukkit.getWorlds().get(0).getName(), i).equals(suffix)) {
+			if (suffix.equals(Main.vaultAPI.getGroupSuffix(Bukkit.getWorlds().get(0).getName(), i))) {
 				return i;
 			}
 		}

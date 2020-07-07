@@ -11,5 +11,6 @@
     <orderEntry type="library" name="spigot-1.12.2-2" level="project" />
     <orderEntry type="library" name="Libraries" level="project" />
     <orderEntry type="library" name="Vault" level="project" />
+    <orderEntry type="library" name="spigot-1.9.4-2" level="project" />
   </component>
 </module>

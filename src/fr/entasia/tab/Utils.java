@@ -25,7 +25,6 @@ public class Utils {
 
 	public static ArrayList<TabGroup> tabGroups = new ArrayList<>();
 
-	public static TabGroup admin, def;
 	public static Comparator<TabGroup> comparator;
 
 	static{
@@ -51,7 +50,9 @@ public class Utils {
 
 	public synchronized static void loadPriorities(){
 
+		System.out.println("loading prios");
 		for(TabGroup tg : tabGroups) {
+			System.out.println("del "+tg);
 			tg.sendPacketAll(Mode.DELETE);
 		}
 		tabGroups.clear();
@@ -80,11 +81,11 @@ public class Utils {
 	}
 
 	public static void loadAllUsers() {
-		for(Player p : Bukkit.getOnlinePlayers()) loadUser(p);
+		for(Player p : Bukkit.getOnlinePlayers()) loadUser(p, false);
 	}
 
 
-	public static void loadUser(Player p) {
+	public static void loadUser(Player p, boolean join) {
 
 		p.setCustomNameVisible(true);
 
@@ -106,12 +107,15 @@ public class Utils {
 				}
 
 				assert tg != null;
-
-				p.setPlayerListName(entry.getValue().replace("&", "§") + " §7" + p.getDisplayName());
+				String prefix = meta.getPrefix();
+				if(prefix==null)prefix = entry.getValue();
+				p.setPlayerListName(prefix.replace("&", "§") + " §7" + p.getDisplayName());
 				tg.list.add(p.getName());
 
-				for (TabGroup i : tabGroups) {
-					i.sendPacket(p, Mode.CREATE);
+				if(join){
+					for (TabGroup i : tabGroups) {
+						i.sendPacket(p, Mode.CREATE);
+					}
 				}
 				tg.sendPacketAll(Mode.ADD_PLAYERS, p.getName());
 			}else error("Luckperms suffix not found for "+p.getName());
