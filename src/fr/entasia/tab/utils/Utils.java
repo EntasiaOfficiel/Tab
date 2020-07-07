@@ -4,6 +4,7 @@ import fr.entasia.apis.other.Pair;
 import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.errors.EntasiaException;
 import fr.entasia.tab.Main;
+import net.luckperms.api.cacheddata.CachedMetaData;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
@@ -11,6 +12,8 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Utils {
 
@@ -85,28 +88,30 @@ public class Utils {
 		User user = Main.lpAPI.getUserManager().getUser(p.getName());
 		if (user == null) error("Luckperms user could not being loaded for " + p.getName());
 		else {
-			Pair<String, Integer> pair = LPUtils.getSuffix(user);
-			if(pair==null)error("Luckperms suffix not found for "+p.getName());
-			else{
-				TabGroup tg = TabGroup.getByName(pair.value);
+
+			CachedMetaData meta = user.getCachedData().getMetaData();
+			Iterator<Map.Entry<Integer, String>> ite = meta.getSuffixes().entrySet().iterator();
+			if(ite.hasNext()) {
+				Map.Entry<Integer, String> entry = ite.next();
+				TabGroup tg = TabGroup.getByName(entry.getKey());
 				if (tg == null) {
 					loadPriorities();
-					tg = TabGroup.getByName(pair.value);
-					if(tg == null) {
-						error("TabGroup could be loaded for prefix "+pair.key+" priority "+pair.value);
+					tg = TabGroup.getByName(entry.getKey());
+					if (tg == null) {
+						error("TabGroup could be loaded for prefix " + entry.getValue() + " priority " + entry.getKey());
 					}
 				}
 
 				assert tg != null;
 
-				p.setPlayerListName(pair.key.replace("&", "§")+" §7"+p.getDisplayName());
+				p.setPlayerListName(entry.getValue().replace("&", "§") + " §7" + p.getDisplayName());
 				tg.list.add(p.getName());
 
-				for(TabGroup i : tabGroups){
+				for (TabGroup i : tabGroups) {
 					i.sendPacket(p, Mode.CREATE);
 				}
 				tg.sendPacketAll(Mode.ADD_PLAYERS, p.getName());
-			}
+			}else error("Luckperms suffix not found for "+p.getName());
 		}
 	}
 

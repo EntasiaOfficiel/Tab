@@ -51,14 +51,14 @@ public class LPUtils {
 	}
 
 
-	public static Pair<String, Integer> getSuffix(User user){
-		CachedMetaData meta = user.getCachedData().getMetaData();
-		Iterator<Map.Entry<Integer, String>> ite = meta.getSuffixes().entrySet().iterator();
-		if(ite.hasNext()){
-			Map.Entry<Integer, String> a = ite.next();
-			return new Pair<>(a.getValue(), a.getKey());
-		}else return null;
-	}
+//	public static Pair<String, Integer> getSuffix(User user){
+//		CachedMetaData meta = user.getCachedData().getMetaData();
+//		Iterator<Map.Entry<Integer, String>> ite = meta.getSuffixes().entrySet().iterator();
+//		if(ite.hasNext()){
+//			Map.Entry<Integer, String> a = ite.next();
+//			return new Pair<>(a.getValue(), a.getKey());
+//		}else return null;
+//	}
 
 	public static Pair<String, Integer> getSuffix(Group gr){
 

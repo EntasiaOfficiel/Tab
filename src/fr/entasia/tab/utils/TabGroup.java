@@ -27,6 +27,8 @@ public class TabGroup {
 		}
 	}
 
+	public String id;
+
 	public Collection<String> list = new ArrayList<>();
 	public int priority;
 	public String cutName;
@@ -35,6 +37,7 @@ public class TabGroup {
 
 	public TabGroup(int priority, String name, String prefix) {
 		this.priority = priority;
+		this.id = name;
 		if (name.length() > 16) this.cutName = name.substring(0, 15);
 		else this.cutName = name;
 
