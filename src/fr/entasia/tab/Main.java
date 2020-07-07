@@ -26,7 +26,7 @@ public class Main extends JavaPlugin {
 			vaultAPI = getServer().getServicesManager().getRegistration(Chat.class).getProvider();
 
 			getLogger().info("Plugin activé");
-//			getServer().getPluginManager().registerEvents(new Listeners(), this);
+			getServer().getPluginManager().registerEvents(new Listeners(), this);
 			getCommand("tabreload").setExecutor(new TabReloadCmd());
 			getCommand("test").setExecutor(new TestCmd());
 			Utils.loadPriorities();

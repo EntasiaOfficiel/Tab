@@ -19,11 +19,28 @@ public class Utils {
 
 	public static ArrayList<TabGroup> tabGroups = new ArrayList<>();
 
+	public static TabGroup admin, def;
 	public static Comparator<TabGroup> comparator;
 
 	static{
 		comparator = Comparator.comparingInt(o -> o.priority);
 		comparator = comparator.reversed();
+	}
+
+	public synchronized static void loadPrioritiesa() {
+		System.out.println("loading prios");
+		tabGroups.clear();
+		admin = new TabGroup(150, "admin", "§cAdmin");
+		def = new TabGroup(50, "default", "§8Joueur");
+
+		admin.assignChar('A');
+		def.assignChar('B');
+
+		admin.list.add("mortel1211");
+		def.list.add("iTrooz_");
+
+		tabGroups.add(admin);
+		tabGroups.add(def);
 	}
 
 	public synchronized static void loadPriorities(){
