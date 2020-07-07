@@ -1,7 +1,7 @@
 package fr.entasia.tab.tools;
 
 
-import fr.entasia.tab.utils.Utils;
+import fr.entasia.tab.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

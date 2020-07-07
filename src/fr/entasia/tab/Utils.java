@@ -1,9 +1,12 @@
-package fr.entasia.tab.utils;
+package fr.entasia.tab;
 
 import fr.entasia.apis.other.Pair;
 import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.errors.EntasiaException;
 import fr.entasia.tab.Main;
+import fr.entasia.tab.utils.LPUtils;
+import fr.entasia.tab.utils.Mode;
+import fr.entasia.tab.utils.TabGroup;
 import net.luckperms.api.cacheddata.CachedMetaData;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
@@ -30,21 +33,21 @@ public class Utils {
 		comparator = comparator.reversed();
 	}
 
-	public synchronized static void loadPrioritiesa() {
-		System.out.println("loading prios");
-		tabGroups.clear();
-		admin = new TabGroup(150, "admin", "§cAdmin");
-		def = new TabGroup(50, "default", "§8Joueur");
-
-		admin.assignChar('A');
-		def.assignChar('B');
-
-		admin.list.add("mortel1211");
-		def.list.add("iTrooz_");
-
-		tabGroups.add(admin);
-		tabGroups.add(def);
-	}
+//	public synchronized static void loadPrioritiesa() {
+//		System.out.println("loading prios");
+//		tabGroups.clear();
+//		admin = new TabGroup(150, "admin", "§cAdmin");
+//		def = new TabGroup(50, "default", "§8Joueur");
+//
+//		admin.assignChar('A');
+//		def.assignChar('B');
+//
+//		admin.list.add("mortel1211");
+//		def.list.add("iTrooz_");
+//
+//		tabGroups.add(admin);
+//		tabGroups.add(def);
+//	}
 
 	public synchronized static void loadPriorities(){
 
@@ -93,10 +96,10 @@ public class Utils {
 			Iterator<Map.Entry<Integer, String>> ite = meta.getSuffixes().entrySet().iterator();
 			if(ite.hasNext()) {
 				Map.Entry<Integer, String> entry = ite.next();
-				TabGroup tg = TabGroup.getByName(entry.getKey());
+				TabGroup tg = TabGroup.getByPrio(entry.getKey());
 				if (tg == null) {
 					loadPriorities();
-					tg = TabGroup.getByName(entry.getKey());
+					tg = TabGroup.getByPrio(entry.getKey());
 					if (tg == null) {
 						error("TabGroup could be loaded for prefix " + entry.getValue() + " priority " + entry.getKey());
 					}

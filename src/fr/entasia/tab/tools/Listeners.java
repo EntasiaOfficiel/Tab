@@ -1,9 +1,7 @@
 package fr.entasia.tab.tools;
 
 import fr.entasia.tab.Main;
-import fr.entasia.tab.utils.Mode;
-import fr.entasia.tab.utils.TabGroup;
-import fr.entasia.tab.utils.Utils;
+import fr.entasia.tab.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

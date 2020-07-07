@@ -2,6 +2,7 @@ package fr.entasia.tab.utils;
 
 import com.google.common.reflect.Reflection;
 import fr.entasia.apis.utils.ReflectionUtils;
+import fr.entasia.tab.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -78,7 +79,7 @@ public class TabGroup {
 
 	public synchronized void sendPacket(Player p, Mode mode){
 		Object packet = createPacket(mode);
-		System.out.println("sent packet for "+cutName+" to "+p.getName()+" (mode "+mode.value+") (members "+ Arrays.toString(list.toArray())+")");
+//		System.out.println("sent packet for "+cutName+" to "+p.getName()+" (mode "+mode.value+") (members "+ Arrays.toString(list.toArray())+")");
 		ReflectionUtils.sendPacket(p, packet);
 	}
 
@@ -88,20 +89,19 @@ public class TabGroup {
 
 	public synchronized void sendPacketAll(Mode mode, String except){
 		Object packet = createPacket(mode);
-		System.out.println("sent packet for "+cutName+" to ALL PLAYERS (mode "+mode.value+") (members "+ Arrays.toString(list.toArray())+")");
+//		System.out.println("sent packet for "+cutName+" to ALL PLAYERS (mode "+mode.value+") (members "+ Arrays.toString(list.toArray())+")");
 		for(Player p : Bukkit.getOnlinePlayers()){
 			if(p.getName().equals(except)){
-				System.out.println("except LOOP "+p.getName());
+//				System.out.println("except LOOP "+p.getName());
 			}else{
-				System.out.println("sent packet for "+cutName+" to LOOP "+p.getName()+" (mode "+mode.value+") (members "+ Arrays.toString(list.toArray())+")");
+//				System.out.println("sent packet for "+cutName+" to LOOP "+p.getName()+" (mode "+mode.value+") (members "+ Arrays.toString(list.toArray())+")");
 				ReflectionUtils.sendPacket(p, packet);
 			}
 		}
 	}
 
-	public static TabGroup getByName(int w){
+	public static TabGroup getByPrio(int w){
 		for(TabGroup tg : Utils.tabGroups){
-			System.out.println(tg.priority+"  "+w);
 			if(tg.priority==w)return tg;
 		}
 		return null;
