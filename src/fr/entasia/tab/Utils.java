@@ -50,9 +50,9 @@ public class Utils {
 
 	public synchronized static void loadPriorities(){
 
-		System.out.println("loading prios");
+//		System.out.println("loading prios");
 		for(TabGroup tg : tabGroups) {
-			System.out.println("del "+tg);
+//			System.out.println("del "+tg);
 			tg.sendPacketAll(Mode.DELETE);
 		}
 		tabGroups.clear();
