@@ -29,18 +29,18 @@ public class Main extends JavaPlugin {
 			getCommand("tabreload").setExecutor(new TabReloadCmd());
 			Utils.loadPriorities();
 
-//			new BukkitRunnable() {
-//				public void run() {
-//					Utils.loadPriorities();
-//					Utils.loadAllUsers();
-//				}
-//			}.runTaskTimer(this, 0, 20*60*5);
-//
-//			new BukkitRunnable() {
-//				public void run() {
-//					for(Player p : getServer().getOnlinePlayers()) refreshTab(p);
-//				}
-//			}.runTaskTimer(this, 0, 20*10);
+			new BukkitRunnable() {
+				public void run() {
+					Utils.loadPriorities();
+					Utils.loadAllUsers();
+				}
+			}.runTaskTimer(this, 0, 20*60*5);
+
+			new BukkitRunnable() {
+				public void run() {
+					for(Player p : getServer().getOnlinePlayers()) refreshTab(p);
+				}
+			}.runTaskTimer(this, 0, 20*10);
 
 		}catch(Throwable e){
 			e.printStackTrace();

@@ -50,14 +50,6 @@ public class TabGroup {
 		this.letter = letter;
 	}
 
-//	private void setField(String field, Object value){
-//		try{
-//			ReflectionUtils.setField(packet, field, value);
-//		}catch(ReflectiveOperationException e){
-//			e.printStackTrace();
-//		}
-//	}
-
 	private Object createPacket(Mode mode){
 		try{
 			Object packet = PacketPlayOutScoreboardTeam.newInstance();
