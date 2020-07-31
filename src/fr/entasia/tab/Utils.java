@@ -129,7 +129,7 @@ public class Utils {
 	}
 
 	public static void error(String s){
-		ServerUtils.permMsg("log.tab", "§4Tab : "+s);m
+		ServerUtils.permMsg("log.tab", "§4Tab : "+s);
 		throw new EntasiaException(s);
 	}
 
