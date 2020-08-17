@@ -1,11 +1,18 @@
 package fr.entasia.tab.utils;
 
 import com.google.common.reflect.Reflection;
+import fr.entasia.apis.other.ChatComponent;
 import fr.entasia.apis.utils.ReflectionUtils;
+import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.tab.Utils;
+import net.minecraft.server.v1_14_R1.ChatComponentText;
+import net.minecraft.server.v1_14_R1.EnumChatFormat;
+import net.minecraft.server.v1_14_R1.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.PacketPlayOutScoreboardTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,11 +26,15 @@ public class TabGroup {
 	 */
 
 	public static Class<?> PacketPlayOutScoreboardTeam;
+	public static Class<?> ChatComponentText;
+	public static Constructor<?> compConstr;
 
 	static{
-		try{
+		try {
 			PacketPlayOutScoreboardTeam = ReflectionUtils.getNMSClass("PacketPlayOutScoreboardTeam");
-		}catch(ReflectiveOperationException e){
+			ChatComponentText = ReflectionUtils.getNMSClass("ChatComponentText");
+			compConstr = ChatComponentText.getDeclaredConstructor(String.class);
+		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
 	}
@@ -42,8 +53,8 @@ public class TabGroup {
 		if (name.length() > 16) this.cutName = name.substring(0, 15);
 		else this.cutName = name;
 
-		if (prefix.length() > 15) Utils.error("Prefix too large : |" + prefix + "|");
-		else this.prefix = prefix.replace("&", "§") + " ";
+		if (prefix.length() > 13) Utils.error("Prefix too large : |" + prefix + "|");
+		else this.prefix = prefix.replace("&", "§") + "§7 ";
 	}
 
 	public void assignChar(Character letter) {
@@ -53,15 +64,25 @@ public class TabGroup {
 	private Object createPacket(Mode mode){
 		try{
 			Object packet = PacketPlayOutScoreboardTeam.newInstance();
-
-			ReflectionUtils.setField(packet,"a", letter+cutName);
-			ReflectionUtils.setField(packet,"b", letter+cutName);
-			ReflectionUtils.setField(packet,"c", prefix); // prefix
-			ReflectionUtils.setField(packet,"e", "always"); // display ?
-			ReflectionUtils.setField(packet,"f", "1"); // aucune idée ?
-			ReflectionUtils.setField(packet,"h", list); // collection (joueurs dans la team)
-			ReflectionUtils.setField(packet,"i", mode.value); // mode  https://wiki.vg/Protocol#Display_Scoreboard
-			ReflectionUtils.setField(packet,"j", 1); // friendly fire
+			if(ServerUtils.getMajorVersion()>12){
+				ReflectionUtils.setField(packet,"a", letter+cutName);
+				ReflectionUtils.setField(packet,"b", compConstr.newInstance(letter+cutName));
+				ReflectionUtils.setField(packet,"c", compConstr.newInstance(prefix)); // prefix
+				ReflectionUtils.setField(packet,"e", "always"); // display ?
+				ReflectionUtils.setField(packet,"f", "1"); // aucune idée ?
+				ReflectionUtils.setField(packet,"h", list); // collection (joueurs dans la team)
+				ReflectionUtils.setField(packet,"i", mode.value); // mode  https://wiki.vg/Protocol#Display_Scoreboard
+				ReflectionUtils.setField(packet,"j", 1); // friendly fire
+			}else{
+				ReflectionUtils.setField(packet,"a", letter+cutName);
+				ReflectionUtils.setField(packet,"b", letter+cutName);
+				ReflectionUtils.setField(packet,"c", prefix); // prefix
+				ReflectionUtils.setField(packet,"e", "always"); // display ?
+				ReflectionUtils.setField(packet,"f", "1"); // aucune idée ?
+				ReflectionUtils.setField(packet,"h", list); // collection (joueurs dans la team)
+				ReflectionUtils.setField(packet,"i", mode.value); // mode  https://wiki.vg/Protocol#Display_Scoreboard
+				ReflectionUtils.setField(packet,"j", 1); // friendly fire
+			}
 			return packet;
 		}catch(ReflectiveOperationException e){
 			e.printStackTrace();
