@@ -1,9 +1,9 @@
 package fr.entasia.tab;
 
 import fr.entasia.apis.other.Pair;
+import fr.entasia.apis.utils.LPUtils;
 import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.errors.EntasiaException;
-import fr.entasia.tab.utils.LPUtils;
 import fr.entasia.tab.utils.Mode;
 import fr.entasia.tab.utils.TabGroup;
 import net.luckperms.api.model.group.Group;
@@ -54,9 +54,9 @@ public class Utils {
 		tabGroups.clear();
 
 		// calcul des priorités
-		for(Group gr : Main.lpAPI.getGroupManager().getLoadedGroups()){
+		for(Group gr : LPUtils.lpAPI.getGroupManager().getLoadedGroups()){
 
-			Pair<String, Integer> pair = LPUtils.getHighestSuff(gr);
+			Pair<String, Integer> pair = LPUtils.getHighestSuffix(gr);
 			if(pair!=null){
 				tabGroups.add(new TabGroup(pair.value, gr.getName(), pair.key));
 			}
@@ -64,9 +64,9 @@ public class Utils {
 
 		User user;
 		for(Player p : Bukkit.getOnlinePlayers()){
-			user = Main.lpAPI.getUserManager().getUser(p.getName());
+			user = LPUtils.getUser(p);
 			if(user==null)continue;
-			Pair<String, Integer> pair = LPUtils.getHighestSuff(user);
+			Pair<String, Integer> pair = LPUtils.getHighestSuffix(user);
 			if(pair==null)continue;
 			for(TabGroup tg : tabGroups){
 				if(tg.priority==pair.value&&tg.suffix.equals(pair.key)){
@@ -94,11 +94,11 @@ public class Utils {
 
 		p.setCustomNameVisible(true);
 
-		User user = Main.lpAPI.getUserManager().getUser(p.getName());
+		User user = LPUtils.getUser(p);
 		if (user == null) error("Luckperms user could not being loaded for " + p.getName());
 		else {
 
-			Pair<String, Integer> pair = LPUtils.getHighestSuff(user);
+			Pair<String, Integer> pair = LPUtils.getHighestSuffix(user);
 			if(pair!=null) {
 				TabGroup tg = TabGroup.getByPrio(pair.value);
 				if (tg == null) {
@@ -111,7 +111,7 @@ public class Utils {
 
 				assert tg != null;
 				String prefix = pair.key;
-				pair = LPUtils.getHighestPref(user);
+				pair = LPUtils.getHighestPrefix(user);
 				if(pair!=null)prefix = pair.key;
 				p.setPlayerListName(prefix.replace("&", "§") + " §7" + p.getDisplayName());
 				tg.list.add(p.getName());

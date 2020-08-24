@@ -3,8 +3,6 @@ package fr.entasia.tab;
 import fr.entasia.apis.utils.PlayerUtils;
 import fr.entasia.tab.tools.Listeners;
 import fr.entasia.tab.tools.TabReloadCmd;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,15 +10,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class Main extends JavaPlugin {
 
-	public static LuckPerms lpAPI;
-//	public static Chat vaultAPI;
 	public static Main main;
 
 	@Override
 	public void onEnable(){
 		try{
 			main = this;
-			lpAPI = LuckPermsProvider.get();
 //			vaultAPI = getServer().getServicesManager().getRegistration(Chat.class).getProvider();
 
 			getLogger().info("Plugin activé");
