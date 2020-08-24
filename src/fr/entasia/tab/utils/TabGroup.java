@@ -1,20 +1,13 @@
 package fr.entasia.tab.utils;
 
-import com.google.common.reflect.Reflection;
-import fr.entasia.apis.other.ChatComponent;
 import fr.entasia.apis.utils.ReflectionUtils;
 import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.tab.Utils;
-import net.minecraft.server.v1_14_R1.ChatComponentText;
-import net.minecraft.server.v1_14_R1.EnumChatFormat;
-import net.minecraft.server.v1_14_R1.IChatBaseComponent;
-import net.minecraft.server.v1_9_R2.PacketPlayOutScoreboardTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 public class TabGroup {
@@ -44,17 +37,17 @@ public class TabGroup {
 	public Collection<String> list = new ArrayList<>();
 	public int priority;
 	public String cutName;
-	public String prefix;
+	public String suffix;
 	public Character letter;
 
-	public TabGroup(int priority, String name, String prefix) {
+	public TabGroup(int priority, String name, String suffix) {
 		this.priority = priority;
 		this.id = name;
 		if (name.length() > 16) this.cutName = name.substring(0, 15);
 		else this.cutName = name;
 
-		if (prefix.length() > 13) Utils.error("Prefix too large : |" + prefix + "|");
-		else this.prefix = prefix.replace("&", "§") + "§7 ";
+		if (suffix.length() > 13) Utils.error("Prefix too large : |" + suffix + "|");
+		else this.suffix = suffix.replace("&", "§") + "§7 ";
 	}
 
 	public void assignChar(Character letter) {
@@ -67,7 +60,7 @@ public class TabGroup {
 			if(ServerUtils.getMajorVersion()>12){
 				ReflectionUtils.setField(packet,"a", letter+cutName);
 				ReflectionUtils.setField(packet,"b", compConstr.newInstance(letter+cutName));
-				ReflectionUtils.setField(packet,"c", compConstr.newInstance(prefix)); // prefix
+				ReflectionUtils.setField(packet,"c", compConstr.newInstance(suffix)); // prefix
 				ReflectionUtils.setField(packet,"e", "always"); // display ?
 				ReflectionUtils.setField(packet,"f", "1"); // aucune idée ?
 				ReflectionUtils.setField(packet,"h", list); // collection (joueurs dans la team)
@@ -76,7 +69,7 @@ public class TabGroup {
 			}else{
 				ReflectionUtils.setField(packet,"a", letter+cutName);
 				ReflectionUtils.setField(packet,"b", letter+cutName);
-				ReflectionUtils.setField(packet,"c", prefix); // prefix
+				ReflectionUtils.setField(packet,"c", suffix); // prefix
 				ReflectionUtils.setField(packet,"e", "always"); // display ?
 				ReflectionUtils.setField(packet,"f", "1"); // aucune idée ?
 				ReflectionUtils.setField(packet,"h", list); // collection (joueurs dans la team)

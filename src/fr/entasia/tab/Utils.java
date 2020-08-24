@@ -3,11 +3,9 @@ package fr.entasia.tab;
 import fr.entasia.apis.other.Pair;
 import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.errors.EntasiaException;
-import fr.entasia.tab.Main;
 import fr.entasia.tab.utils.LPUtils;
 import fr.entasia.tab.utils.Mode;
 import fr.entasia.tab.utils.TabGroup;
-import net.luckperms.api.cacheddata.CachedMetaData;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
@@ -15,8 +13,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Map;
 
 public class Utils {
 
@@ -60,15 +56,24 @@ public class Utils {
 		// calcul des priorités
 		for(Group gr : Main.lpAPI.getGroupManager().getLoadedGroups()){
 
-			Pair<String, Integer> pair = LPUtils.getSuffix(gr);
+			Pair<String, Integer> pair = LPUtils.getHighestSuff(gr);
 			if(pair!=null){
 				tabGroups.add(new TabGroup(pair.value, gr.getName(), pair.key));
 			}
 		}
-		
+
+		User user;
 		for(Player p : Bukkit.getOnlinePlayers()){
-			Pair<String, Integer> pair = LPUtils.getPersonnalSuffix(p);
-			if(pair!=null) tabGroups.add(new TabGroup(pair.value, p.getName(), pair.key));
+			user = Main.lpAPI.getUserManager().getUser(p.getName());
+			if(user==null)continue;
+			Pair<String, Integer> pair = LPUtils.getHighestSuff(user);
+			if(pair==null)continue;
+			for(TabGroup tg : tabGroups){
+				if(tg.priority==pair.value&&tg.suffix.equals(pair.key)){
+					break;
+				}
+			}
+			tabGroups.add(new TabGroup(pair.value, p.getName(), pair.key));
 		}
 
 		tabGroups.sort(comparator);
@@ -93,22 +98,21 @@ public class Utils {
 		if (user == null) error("Luckperms user could not being loaded for " + p.getName());
 		else {
 
-			CachedMetaData meta = user.getCachedData().getMetaData();
-			Iterator<Map.Entry<Integer, String>> ite = meta.getSuffixes().entrySet().iterator();
-			if(ite.hasNext()) {
-				Map.Entry<Integer, String> entry = ite.next();
-				TabGroup tg = TabGroup.getByPrio(entry.getKey());
+			Pair<String, Integer> pair = LPUtils.getHighestSuff(user);
+			if(pair!=null) {
+				TabGroup tg = TabGroup.getByPrio(pair.value);
 				if (tg == null) {
 					loadPriorities();
-					tg = TabGroup.getByPrio(entry.getKey());
+					tg = TabGroup.getByPrio(pair.value);
 					if (tg == null) {
-						error("TabGroup could be loaded for prefix " + entry.getValue() + " priority " + entry.getKey());
+						error("TabGroup could be loaded for prefix " + pair.key + " priority " + pair.value);
 					}
 				}
 
 				assert tg != null;
-				String prefix = meta.getPrefix();
-				if(prefix==null)prefix = entry.getValue();
+				String prefix = pair.key;
+				pair = LPUtils.getHighestPref(user);
+				if(pair!=null)prefix = pair.key;
 				p.setPlayerListName(prefix.replace("&", "§") + " §7" + p.getDisplayName());
 				tg.list.add(p.getName());
 

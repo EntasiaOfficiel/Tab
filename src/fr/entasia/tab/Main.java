@@ -6,7 +6,6 @@ import fr.entasia.tab.tools.TabReloadCmd;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.milkbowl.vault.chat.Chat;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -14,7 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Main extends JavaPlugin {
 
 	public static LuckPerms lpAPI;
-	public static Chat vaultAPI;
+//	public static Chat vaultAPI;
 	public static Main main;
 
 	@Override
@@ -22,7 +21,7 @@ public class Main extends JavaPlugin {
 		try{
 			main = this;
 			lpAPI = LuckPermsProvider.get();
-			vaultAPI = getServer().getServicesManager().getRegistration(Chat.class).getProvider();
+//			vaultAPI = getServer().getServicesManager().getRegistration(Chat.class).getProvider();
 
 			getLogger().info("Plugin activé");
 			getServer().getPluginManager().registerEvents(new Listeners(), this);
