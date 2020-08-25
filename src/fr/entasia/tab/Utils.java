@@ -6,6 +6,8 @@ import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.errors.EntasiaException;
 import fr.entasia.tab.utils.Mode;
 import fr.entasia.tab.utils.TabGroup;
+import net.luckperms.api.cacheddata.CachedMetaData;
+import net.luckperms.api.model.PermissionHolder;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
@@ -13,6 +15,8 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Utils {
 
@@ -44,6 +48,24 @@ public class Utils {
 //		tabGroups.add(def);
 //	}
 
+	public static Pair<String, Integer> getPrefix(PermissionHolder holder) {
+		CachedMetaData meta = holder.getCachedData().getMetaData();
+		Iterator<Map.Entry<Integer, String>> ite = meta.getPrefixes().entrySet().iterator();
+		if(ite.hasNext()){
+			Map.Entry<Integer, String> a = ite.next();
+			return new Pair<>(a.getValue().replace("&", "§"), a.getKey());
+		}else return null;
+	}
+
+	public static Pair<String, Integer> getSuffix(PermissionHolder holder) {
+		CachedMetaData meta = holder.getCachedData().getMetaData();
+		Iterator<Map.Entry<Integer, String>> ite = meta.getSuffixes().entrySet().iterator();
+		if(ite.hasNext()){
+			Map.Entry<Integer, String> a = ite.next();
+			return new Pair<>(a.getValue().replace("&", "§"), a.getKey());
+		}else return null;
+	}
+
 	public synchronized static void loadPriorities(){
 
 //		System.out.println("loading prios");
@@ -56,17 +78,14 @@ public class Utils {
 		// calcul des priorités
 		for(Group gr : LPUtils.lpAPI.getGroupManager().getLoadedGroups()){
 
-			Pair<String, Integer> pair = LPUtils.getHighestSuffix(gr);
+			Pair<String, Integer> pair = getSuffix(gr);
 			if(pair!=null){
 				tabGroups.add(new TabGroup(pair.value, gr.getName(), pair.key));
 			}
 		}
 
-		User user;
 		for(Player p : Bukkit.getOnlinePlayers()){
-			user = LPUtils.getUser(p);
-			if(user==null)continue;
-			Pair<String, Integer> pair = LPUtils.getHighestSuffix(user);
+			Pair<String, Integer> pair = LPUtils.getSuffix(p);
 			if(pair==null)continue;
 			for(TabGroup tg : tabGroups){
 				if(tg.priority==pair.value&&tg.suffix.equals(pair.key)){
@@ -98,7 +117,7 @@ public class Utils {
 		if (user == null) error("Luckperms user could not being loaded for " + p.getName());
 		else {
 
-			Pair<String, Integer> pair = LPUtils.getHighestSuffix(user);
+			Pair<String, Integer> pair = getSuffix(user);
 			if(pair!=null) {
 				TabGroup tg = TabGroup.getByPrio(pair.value);
 				if (tg == null) {
@@ -111,9 +130,9 @@ public class Utils {
 
 				assert tg != null;
 				String prefix = pair.key;
-				pair = LPUtils.getHighestPrefix(user);
+				pair = getPrefix(user);
 				if(pair!=null)prefix = pair.key;
-				p.setPlayerListName(prefix.replace("&", "§") + " §7" + p.getDisplayName());
+				p.setPlayerListName(prefix + " §7" + p.getDisplayName());
 				tg.list.add(p.getName());
 
 				if(join){
@@ -127,15 +146,9 @@ public class Utils {
 	}
 
 
-	public static void error(Exception e){
-		ServerUtils.permMsg("log.tab", e.getMessage());
-		throw new EntasiaException(e);
-	}
-
 	public static void error(String s){
 		ServerUtils.permMsg("log.tab", "§4Tab : "+s);
 		throw new EntasiaException(s);
 	}
-
 
 }

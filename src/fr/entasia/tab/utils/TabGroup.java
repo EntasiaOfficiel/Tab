@@ -47,7 +47,7 @@ public class TabGroup {
 		else this.cutName = name;
 
 		if (suffix.length() > 13) Utils.error("Prefix too large : |" + suffix + "|");
-		else this.suffix = suffix.replace("&", "§") + "§7 ";
+		else this.suffix = suffix + "§7 ";
 	}
 
 	public void assignChar(Character letter) {
