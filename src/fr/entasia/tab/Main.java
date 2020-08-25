@@ -45,7 +45,7 @@ public class Main extends JavaPlugin {
 
 
 	public static void refreshTab(Player p){
-		p.setPlayerListHeaderFooter(new TextComponent("§3Bienvenue sur §bEnta§7sia!\n Ping : §b"+ PlayerUtils.getPing(p, false) +" \n §7§m-------------------§r"),
+		p.setPlayerListHeaderFooter(new TextComponent("§3Bienvenue sur §bEnta§7sia!\n Ping : §b"+ PlayerUtils.getPing(p) +" \n §7§m-------------------§r"),
 				new TextComponent("§7§m-------------------§r\n §3Discord: §b/discord"));
 	}
 
