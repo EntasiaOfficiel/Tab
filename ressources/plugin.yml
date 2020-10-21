@@ -1,5 +1,6 @@
 name: Tab
 version: '-1'
+api-version: '1.15'
 main: fr.entasia.tab.Main
 depend: [LuckPerms, Libraries]
 softdepend: [Multiverse-Core]
