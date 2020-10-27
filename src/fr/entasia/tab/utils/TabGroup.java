@@ -66,15 +66,6 @@ public class TabGroup {
 				ReflectionUtils.setField(packet,"h", list); // collection (joueurs dans la team)
 				ReflectionUtils.setField(packet,"i", mode.value); // mode  https://wiki.vg/Protocol#Display_Scoreboard
 				ReflectionUtils.setField(packet,"j", 1); // friendly fire
-			}else{
-				ReflectionUtils.setField(packet,"a", letter+cutName);
-				ReflectionUtils.setField(packet,"b", letter+cutName);
-				ReflectionUtils.setField(packet,"c", suffix); // prefix
-				ReflectionUtils.setField(packet,"e", "always"); // display ?
-				ReflectionUtils.setField(packet,"f", "1"); // aucune idée ?
-				ReflectionUtils.setField(packet,"h", list); // collection (joueurs dans la team)
-				ReflectionUtils.setField(packet,"i", mode.value); // mode  https://wiki.vg/Protocol#Display_Scoreboard
-				ReflectionUtils.setField(packet,"j", 1); // friendly fire
 			}
 			return packet;
 		}catch(ReflectiveOperationException e){
